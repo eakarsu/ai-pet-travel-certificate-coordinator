@@ -1,0 +1,612 @@
+{
+  "PetJourney": {
+    "name": "PetJourney",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "origin",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "destination",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "departureAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "arrivalAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "coordinator",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      }
+    ]
+  },
+  "TravelPet": {
+    "name": "TravelPet",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "species",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "breed",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "microchipNumber",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "birthDate",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "ownerName",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "VeterinaryVisit": {
+    "name": "VeterinaryVisit",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "travelPetId",
+        "kind": "string",
+        "required": true,
+        "relation": "TravelPet"
+      },
+      {
+        "name": "visitedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "veterinarian",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "findings",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "clinic",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "PetVaccination": {
+    "name": "PetVaccination",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "travelPetId",
+        "kind": "string",
+        "required": true,
+        "relation": "TravelPet"
+      },
+      {
+        "name": "vaccine",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "administeredAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "expiresAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "lotNumber",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "PetLabResult": {
+    "name": "PetLabResult",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "travelPetId",
+        "kind": "string",
+        "required": true,
+        "relation": "TravelPet"
+      },
+      {
+        "name": "testName",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sampledAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "resultAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "resultText",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "laboratory",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "DestinationRule": {
+    "name": "DestinationRule",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "jurisdiction",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "version",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "effectiveAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "requirementText",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceUrl",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "HealthCertificate": {
+    "name": "HealthCertificate",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "travelPetId",
+        "kind": "string",
+        "required": true,
+        "relation": "TravelPet"
+      },
+      {
+        "name": "issuedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "validUntil",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "veterinarian",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "endorsementReceipt",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "AirlineBooking": {
+    "name": "AirlineBooking",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "airline",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "flightNumber",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "departureAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "arrivalAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "bookingReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "BorderHandoff": {
+    "name": "BorderHandoff",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "travelPetId",
+        "kind": "string",
+        "required": true,
+        "relation": "TravelPet"
+      },
+      {
+        "name": "handedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "receivingAgent",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "documents",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "receipt",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "OperationalTask": {
+    "name": "OperationalTask",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "owner",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "priority",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "startAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "dueAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "done",
+        "kind": "boolean",
+        "required": true
+      },
+      {
+        "name": "notes",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "RuleVersion": {
+    "name": "RuleVersion",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "jurisdiction",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "version",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "effectiveAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "expiresAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "sourceUrl",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "requirementText",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  },
+  "DocumentRequirement": {
+    "name": "DocumentRequirement",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "category",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "requiredBy",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "sourceReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "evidenceReference",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "reviewNotes",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "petJourneyId",
+        "kind": "string",
+        "required": true,
+        "relation": "PetJourney"
+      }
+    ],
+    "parent": {
+      "entity": "PetJourney",
+      "field": "petJourneyId"
+    }
+  }
+}

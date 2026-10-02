@@ -1,0 +1,364 @@
+// Generated schema — modeled after beautyhqio conventions.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  active       Boolean @default(true)
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ANALYST)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  ANALYST
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actorName String?
+  action    String
+  entity    String
+  entityId  String?
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model WorkflowAnalysis {
+ id String @id @default(cuid())
+ actorId String
+ workflow String
+ subjectEntity String
+ subjectId String
+ input Json
+ evidence Json
+ evidenceHash String
+ result Json
+ model String
+ receipt String?
+ createdAt DateTime @default(now())
+ @@index([workflow, createdAt])
+}
+model RecordReview {
+ id String @id @default(cuid())
+ actorId String
+ entity String
+ entityId String
+ version String
+ reason String
+ createdAt DateTime @default(now())
+ @@unique([entity, entityId, version, actorId])
+}
+model UsageBucket {
+ id String @id
+ calls Int
+}
+model IssuedCredential {
+ token String @id
+ entity String
+ entityId String
+ version String
+ assertion Json
+ createdAt DateTime @default(now())
+ revokedAt DateTime?
+ @@index([entity, entityId, createdAt])
+}
+
+model DomainArtifact {
+ id String @id @default(cuid())
+ subjectEntity String
+ subjectId String
+ title String
+ content String
+ contentHash String
+ actorId String
+ approvedBy String?
+ createdAt DateTime @default(now())
+ @@index([subjectEntity, subjectId])
+}
+
+model RecordApproval {
+ id String @id
+ version String
+}
+model DomainExecution {
+ id String @id
+ actorId String
+ connectorId String
+ action String
+ subjectEntity String
+ subjectId String
+ version String
+ status String
+ result Json?
+ createdAt DateTime @default(now())
+}
+
+model WorkSession {
+ id String @id @default(cuid())
+ actorId String
+ respondentId String
+ subjectEntity String
+ subjectId String
+ questions Json
+ answers Json
+ currentQuestion String?
+ status String
+ deadline DateTime
+ createdAt DateTime @default(now())
+ @@index([respondentId, createdAt])
+}
+model SessionMedia {
+ id String @id @default(cuid())
+ sessionId String
+ questionId String
+ actorId String
+ contentType String
+ bytes Bytes
+ contentHash String
+ createdAt DateTime @default(now())
+ @@index([sessionId])
+}
+
+model AppSetting {
+ id String @id
+ value Json
+ updatedAt DateTime @updatedAt
+}
+
+model PetJourney {
+ id String @id @default(cuid())
+ name String
+ origin String
+ destination String
+ departureAt DateTime
+ arrivalAt DateTime
+ coordinator String
+ status String @default("Draft")
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ inverseTravelPet_petJourneyId TravelPet[] @relation("TravelPet_petJourneyId")
+ inverseVeterinaryVisit_petJourneyId VeterinaryVisit[] @relation("VeterinaryVisit_petJourneyId")
+ inversePetVaccination_petJourneyId PetVaccination[] @relation("PetVaccination_petJourneyId")
+ inversePetLabResult_petJourneyId PetLabResult[] @relation("PetLabResult_petJourneyId")
+ inverseDestinationRule_petJourneyId DestinationRule[] @relation("DestinationRule_petJourneyId")
+ inverseHealthCertificate_petJourneyId HealthCertificate[] @relation("HealthCertificate_petJourneyId")
+ inverseAirlineBooking_petJourneyId AirlineBooking[] @relation("AirlineBooking_petJourneyId")
+ inverseBorderHandoff_petJourneyId BorderHandoff[] @relation("BorderHandoff_petJourneyId")
+ inverseOperationalTask_petJourneyId OperationalTask[] @relation("OperationalTask_petJourneyId")
+ inverseRuleVersion_petJourneyId RuleVersion[] @relation("RuleVersion_petJourneyId")
+ inverseDocumentRequirement_petJourneyId DocumentRequirement[] @relation("DocumentRequirement_petJourneyId")
+}
+
+model TravelPet {
+ id String @id @default(cuid())
+ name String
+ species String
+ breed String
+ microchipNumber String
+ birthDate DateTime
+ ownerName String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("TravelPet_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+ inverseVeterinaryVisit_travelPetId VeterinaryVisit[] @relation("VeterinaryVisit_travelPetId")
+ inversePetVaccination_travelPetId PetVaccination[] @relation("PetVaccination_travelPetId")
+ inversePetLabResult_travelPetId PetLabResult[] @relation("PetLabResult_travelPetId")
+ inverseHealthCertificate_travelPetId HealthCertificate[] @relation("HealthCertificate_travelPetId")
+ inverseBorderHandoff_travelPetId BorderHandoff[] @relation("BorderHandoff_travelPetId")
+}
+
+model VeterinaryVisit {
+ id String @id @default(cuid())
+ title String
+ travelPetId String
+ visitedAt DateTime
+ veterinarian String
+ findings String
+ clinic String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedTravelPetId TravelPet @relation("VeterinaryVisit_travelPetId", fields: [travelPetId], references: [id], onDelete: Restrict)
+ linkedPetJourneyId PetJourney @relation("VeterinaryVisit_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model PetVaccination {
+ id String @id @default(cuid())
+ title String
+ travelPetId String
+ vaccine String
+ administeredAt DateTime
+ expiresAt DateTime
+ lotNumber String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedTravelPetId TravelPet @relation("PetVaccination_travelPetId", fields: [travelPetId], references: [id], onDelete: Restrict)
+ linkedPetJourneyId PetJourney @relation("PetVaccination_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model PetLabResult {
+ id String @id @default(cuid())
+ title String
+ travelPetId String
+ testName String
+ sampledAt DateTime
+ resultAt DateTime
+ resultText String
+ laboratory String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedTravelPetId TravelPet @relation("PetLabResult_travelPetId", fields: [travelPetId], references: [id], onDelete: Restrict)
+ linkedPetJourneyId PetJourney @relation("PetLabResult_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model DestinationRule {
+ id String @id @default(cuid())
+ title String
+ jurisdiction String
+ version String
+ effectiveAt DateTime
+ requirementText String
+ sourceUrl String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("DestinationRule_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model HealthCertificate {
+ id String @id @default(cuid())
+ title String
+ travelPetId String
+ issuedAt DateTime
+ validUntil DateTime
+ veterinarian String
+ endorsementReceipt String?
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedTravelPetId TravelPet @relation("HealthCertificate_travelPetId", fields: [travelPetId], references: [id], onDelete: Restrict)
+ linkedPetJourneyId PetJourney @relation("HealthCertificate_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model AirlineBooking {
+ id String @id @default(cuid())
+ title String
+ airline String
+ flightNumber String
+ departureAt DateTime
+ arrivalAt DateTime
+ bookingReference String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("AirlineBooking_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model BorderHandoff {
+ id String @id @default(cuid())
+ title String
+ travelPetId String
+ handedAt DateTime
+ receivingAgent String
+ documents String
+ receipt String?
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedTravelPetId TravelPet @relation("BorderHandoff_travelPetId", fields: [travelPetId], references: [id], onDelete: Restrict)
+ linkedPetJourneyId PetJourney @relation("BorderHandoff_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model OperationalTask {
+ id String @id @default(cuid())
+ title String
+ owner String
+ priority String
+ startAt DateTime
+ dueAt DateTime
+ done Boolean
+ notes String?
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("OperationalTask_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model RuleVersion {
+ id String @id @default(cuid())
+ title String
+ jurisdiction String
+ version String
+ effectiveAt DateTime
+ expiresAt DateTime?
+ sourceUrl String
+ requirementText String
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("RuleVersion_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
+
+model DocumentRequirement {
+ id String @id @default(cuid())
+ title String
+ category String
+ requiredBy DateTime
+ sourceReference String
+ evidenceReference String?
+ reviewNotes String?
+ status String @default("Draft")
+ petJourneyId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([petJourneyId])
+ linkedPetJourneyId PetJourney @relation("DocumentRequirement_petJourneyId", fields: [petJourneyId], references: [id], onDelete: Restrict)
+}
